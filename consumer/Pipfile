@@ -4,12 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = "*"
-uvicorn = {extras = ["standard"], version = "*"}
-alembic = "*"
-python-dotenv = "*"
-psycopg2-binary = "*"
 pika = "*"
+requests = "*"
 
 [dev-packages]
 

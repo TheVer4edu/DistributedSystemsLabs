@@ -12,9 +12,32 @@ services:
 
   web:
     build: .
+    restart: on-failure
     ports:
       - "8000:8000"
     env_file:
       - .env
     depends_on:
       - postgres
+      - rabbit
+
+  rabbit:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  consumer:
+    build: consumer/
+    restart: on-failure
+    depends_on:
+      - rabbit
+    env_file:
+      - .env
