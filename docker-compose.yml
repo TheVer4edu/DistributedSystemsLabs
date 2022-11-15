@@ -50,6 +50,10 @@ services:
     restart: on-failure
     depends_on:
       - rabbit
+      - cache
+    links:
+      - rabbit
+      - cache
     env_file:
       - .env
 
@@ -63,3 +67,7 @@ services:
     links:
       - web_1
       - web_2
+
+  cache:
+    image: redis
+
