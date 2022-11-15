@@ -39,6 +39,11 @@ SELECT * FROM links]]></console>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="4df0391d-0d9f-4800-b66b-468b6185a178" />
   </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="4df0391d-0d9f-4800-b66b-468b6185a178" dataset="public.links" active-filter-id="467c5a04-8fcd-4486-9a65-0f7086bb65db">
+      <filter id="467c5a04-8fcd-4486-9a65-0f7086bb65db" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND" />
+    </filter-actions>
+  </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
   </component>

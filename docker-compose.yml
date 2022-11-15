@@ -10,11 +10,22 @@ services:
     env_file:
       - .env
 
-  web:
+  web_1:
     build: .
     restart: on-failure
-    ports:
-      - "8000:8000"
+#    ports:
+#      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbit
+
+  web_2:
+    build: .
+    restart: on-failure
+    #    ports:
+    #      - "8000:8000"
     env_file:
       - .env
     depends_on:
@@ -41,3 +52,14 @@ services:
       - rabbit
     env_file:
       - .env
+
+  balancer:
+    build: nginx/.
+    ports:
+      - "80:80"
+    depends_on:
+      - web_1
+      - web_2
+    links:
+      - web_1
+      - web_2

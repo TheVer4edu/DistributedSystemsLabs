@@ -8,7 +8,8 @@ from os import getenv
 USER = getenv("RABBITMQ_DEFAULT_USER") or "postrgres"
 PASSWORD = getenv("RABBITMQ_DEFAULT_PASS") or "password"
 BROKER_HOSTNAME = 'rabbit'
-WEB_HOSTNAME = 'web'
+WEB_HOSTNAME = 'balancer'
+WEB_PORT = '80'
 
 
 CONNECTION_URL = f'amqp://{USER}:{PASSWORD}@{BROKER_HOSTNAME}:5672/%2F'
@@ -23,7 +24,7 @@ def handle_message(ch, method, properties, body):
     status = response.status_code
     payload = {'id': int(link_json['id']), 'status': str(status)}
     payload_json = json.dumps(payload)
-    result = requests.put(f'http://{WEB_HOSTNAME}:8000/links/', data=payload_json)
+    result = requests.put(f'http://{WEB_HOSTNAME}:{WEB_PORT}/links/', data=payload_json)
     print(result.content)
 
 

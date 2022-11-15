@@ -8,6 +8,7 @@ QUEUE_NAME = 'links'
 
 
 def publish_task(task: str):
+    # TODO Починить пул соединений
     connection = pika.BlockingConnection(pika.URLParameters(CONNECTION_URL))
     channel = connection.channel()
     channel.basic_publish(exchange='', routing_key=QUEUE_NAME, body=task.encode('utf-8'))
