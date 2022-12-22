@@ -10,11 +10,64 @@ services:
     env_file:
       - .env
 
-  web:
+  web_1:
     build: .
-    ports:
-      - "8000:8000"
+    restart: on-failure
+#    ports:
+#      - "8000:8000"
     env_file:
       - .env
     depends_on:
       - postgres
+      - rabbit
+
+  web_2:
+    build: .
+    restart: on-failure
+    #    ports:
+    #      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - rabbit
+
+  rabbit:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  consumer:
+    build: consumer/
+    restart: on-failure
+    depends_on:
+      - rabbit
+      - cache
+    links:
+      - rabbit
+      - cache
+    env_file:
+      - .env
+
+  balancer:
+    build: nginx/.
+    ports:
+      - "80:80"
+    depends_on:
+      - web_1
+      - web_2
+    links:
+      - web_1
+      - web_2
+
+  cache:
+    image: redis
+
