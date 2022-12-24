@@ -20,6 +20,8 @@ services:
     depends_on:
       - postgres
       - rabbit
+    volumes:
+      - app-volume:/appdata
 
   web_2:
     build: .
@@ -31,6 +33,8 @@ services:
     depends_on:
       - postgres
       - rabbit
+    volumes:
+      - app-volume:/appdata
 
   rabbit:
     image: rabbitmq:management
@@ -56,6 +60,8 @@ services:
       - cache
     env_file:
       - .env
+    volumes:
+      - app-volume:/appdata
 
   balancer:
     build: nginx/.
@@ -67,7 +73,23 @@ services:
     links:
       - web_1
       - web_2
+    volumes:
+      - web-ui:/var/www/html
 
   cache:
     image: redis
 
+volumes:
+  app-volume:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${PWD}/appdata
+
+  web-ui:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${PWD}/webgui

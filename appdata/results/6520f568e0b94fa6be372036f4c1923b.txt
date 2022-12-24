@@ -1,0 +1,4 @@
+Simple library and command line utility for extracting summary from HTML
+pages or plain texts.The package also contains simple evaluation
+framework for text summaries.Implemented summarization methods are described in the documentation.I also maintain a list of alternative implementations of the summarizers in various programming languages.Sumy contains command line utility for quick summarization of documents.Various evaluation methods for some summarization method can be executed
+by commands below:If you don't want to bother by the installation, you can try it as a container.Or you can use sumy like a library in your project.I found some interesting projects while browsing the internet or sometimes people wrote me an e-mail with questions, and I was curious how they use the sumy :)If you're not sure which to choose, learn more about installing packages.

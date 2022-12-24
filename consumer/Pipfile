@@ -7,6 +7,8 @@ name = "pypi"
 pika = "*"
 requests = "*"
 redis = "*"
+sumy = "*"
+numpy = "*"
 
 [dev-packages]
 

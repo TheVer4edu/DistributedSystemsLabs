@@ -9,12 +9,12 @@ class Link(BaseModel):
 
 class LinkUpdate(BaseModel):
     id: int
-    status: str
+    result_url: str
 
 
 class LinkInDB(Link):
     id: int
-    status: Optional[str]
+    result_url: Optional[str]
 
     class Config:
         orm_mode = True

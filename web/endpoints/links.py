@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Cookie
 from fastapi import Depends
 import json
 
@@ -12,11 +12,13 @@ router = APIRouter(prefix="/links")
 
 
 @router.post('/', response_model=LinkInDB)
-def post_link(link: Link, db=Depends(get_db)):
+def post_link(link: Link, tg_uid: int = Cookie(None), db=Depends(get_db)):
     """Метод для создания ссылки в базе данных"""
     result = crud.create_link(db=db, url=link.url)
-    session.publish_task(json.dumps(result.as_dict()))
-    return LinkInDB(id=result.id, url=result.url, status=result.status)
+    dict_values = result.as_dict()
+    dict_values['tg_uid'] = tg_uid
+    session.publish_task(json.dumps(dict_values))
+    return LinkInDB(id=result.id, url=result.url, result_url=result.result_url)
 
 
 @router.get('/', response_model=LinkInDB)
@@ -25,14 +27,14 @@ def get_link(id: int, db=Depends(get_db)):
     result = crud.get_link_by_id(db=db, id=id)
     if result is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return LinkInDB(id=result.id, url=result.url, status=result.status)
+    return LinkInDB(id=result.id, url=result.url, result_url=result.result_url)
 
 
 @router.put('/', response_model=LinkInDB)
 def update_link(link: LinkUpdate, db=Depends(get_db)):
     """Метод для обвновления состояния ссылки"""
-    result = crud.update_status_by_id(db=db, id=link.id, status=link.status)
+    result = crud.update_result_url_by_id(db=db, id=link.id, result_url=link.result_url)
     if result is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    return LinkInDB(id=result.id, url=result.url, status=result.status)
+    return LinkInDB(id=result.id, url=result.url, result_url=result.result_url)
 
